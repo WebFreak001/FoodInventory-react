@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+let React = require('react');
+import { Component } from 'react';
 import { Alert } from 'react-native';
 
 import { RNCamera } from 'react-native-camera';

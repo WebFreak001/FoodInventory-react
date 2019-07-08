@@ -1,3 +1,4 @@
+let React = require('react');
 import { Component } from 'react';
 import { Button } from 'react-native';
 
