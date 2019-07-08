@@ -1,8 +1,12 @@
-# For each run
+# For each fresh clone (to do when freshly downloading)
 
 run `npx jetify` (to fix androidx incompatibility, need to do this on every new install)
 
+then run normally using `react-native start` and `react-native run-android`
+
 # Dependencies
+
+Ran `npm install --save-dev jetifier` to allow running jetify in the project.
 
 ## react-native-camera
 
@@ -30,3 +34,7 @@ npm install --save react-navigation
 npm install --save react-native-gesture-handler
 npx jetify
 ```
+
+## react-native-vector-icons
+
+Add `apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"` to android/app/build.gradle

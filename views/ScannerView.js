@@ -16,8 +16,20 @@ export default class ScannerView extends Component {
     title: 'Scanner',
   };
 
+  /**
+   * @param {{barcodes: import('react-native-camera/types').Barcode[]}} e 
+   */
   barcodeReceived(e) {
-    Alert.alert("Barcode value is", JSON.stringify(e));
+    console.log("Barcode received");
+    const { navigate } = this.props.navigation;
+    console.log(navigate);
+
+    var item = e.barcodes[0];
+
+    navigate("AddExisting", {
+      type: item.type,
+      code: item.data
+    });
   }
 
   render() {
@@ -36,8 +48,10 @@ export default class ScannerView extends Component {
           buttonPositive: 'Ok',
           buttonNegative: 'Cancel',
         }}
+        captureAudio={false}
         trackingEnabled
-        onGoogleVisionBarcodesDetected={this.barcodeReceived}
+        onGoogleVisionBarcodesDetected={(e) => this.barcodeReceived(e)}
+        // @ts-ignore
         googleVisionBarcodeType={RNCamera.Constants.GoogleVisionBarcodeDetection.BarcodeType.EAN_13 | RNCamera.Constants.GoogleVisionBarcodeDetection.BarcodeType.EAN_8}
       />
     );

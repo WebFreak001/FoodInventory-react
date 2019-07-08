@@ -67,20 +67,32 @@ export default class ScannedItemRow extends Component {
     _expandScannedItemRow = () => {
         this.setState({isExtended: true})
         Alert.alert(this.state.name + " clicked");
-    }    
+    }
+
+    _renderImage() {
+        if (!this.props.image)
+            return null;
+        return (<Image source={{ uri: this.state.image }} style={styles.photo} />);
+    }
+
+    _renderExpiry() {
+        if (!this.props.expiryDate)
+            return null;
+        return (<Text>
+            {relativeDate(this.state.expiryDate)}
+        </Text>);
+    }
     
     render() {
         return(
             <TouchableOpacity onPress={this._expandScannedItemRow}>
                 <View style={styles.container}>
-                    <Image source={{ uri: this.state.image }} style={styles.photo} />
+                    {this._renderImage()}
                     <View style={styles.container_text}>
                         <Text style={styles.title}>
                             {this.state.name}
                         </Text>
-                        <Text>
-                            {relativeDate(this.state.expiryDate)}
-                        </Text>
+                        {this._renderExpiry()}
                     </View>
                 </View>
             </TouchableOpacity>            
