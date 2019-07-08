@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     },
 });
 
-const ScannedItemRow = ({ id, name, image}) => {
+const ScannedItemRow = ({ name, image}) => {
     return (
         <View style={styles.container}>
             <Image source={{ uri: image }} style={styles.photo} />

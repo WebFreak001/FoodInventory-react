@@ -14,8 +14,8 @@ const ScannedItemView = ({ itemList }) => {
         <View style={styles.container}>
             <FlatList
                 data={itemList}
+                keyExtractor={item => item.bsonID}
                 renderItem={({ item }) =><ScannedItemRow
-                    id={item.id}
                     name={item.name}
                     image={item.image}
                 />}
