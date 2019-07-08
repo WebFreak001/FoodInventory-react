@@ -34,11 +34,10 @@ const styles = StyleSheet.create({
     },
 });
 
-const ScannedItemRow = ({ name, /* image  */}) => {
-    console.log(name);
+const ScannedItemRow = ({ id, name, image}) => {
     return (
         <View style={styles.container}>
-            {/* <Image source={{ uri: image }} style={styles.photo} /> */}
+            <Image source={{ uri: image }} style={styles.photo} />
             <View style={styles.container_text}>
                 <Text style={styles.title}>
                     {name}

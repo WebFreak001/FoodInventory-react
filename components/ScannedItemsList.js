@@ -10,14 +10,14 @@ const styles = StyleSheet.create({
 
 
 const ScannedItemView = ({ itemList }) => {
-    console.log(itemList);
     return (
         <View style={styles.container}>
             <FlatList
                 data={itemList}
                 renderItem={({ item }) =><ScannedItemRow
+                    id={item.id}
                     name={item.name}
-                    /* image={item.image} */
+                    image={item.image}
                 />}
             />
         </View>
