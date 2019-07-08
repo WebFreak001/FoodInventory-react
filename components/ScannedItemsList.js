@@ -18,6 +18,7 @@ const ScannedItemView = ({ itemList }) => {
                 renderItem={({ item }) =><ScannedItemRow
                     name={item.name}
                     image={item.image}
+                    expiryDate={item.expiryDate}
                 />}
             />
         </View>
