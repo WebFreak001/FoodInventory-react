@@ -66,6 +66,7 @@ export default class ScannedItemRow extends Component {
 
     _expandScannedItemRow = () => {
         this.setState({isExtended: true})
+        Alert.alert(this.state.name + " clicked");
     }    
     
     render() {
