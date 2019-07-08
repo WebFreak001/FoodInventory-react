@@ -1,5 +1,6 @@
 let React = require('react');
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
+import { Component } from 'react';
 
 const styles = StyleSheet.create({
     container: {
@@ -52,21 +53,36 @@ function relativeDate(d) {
       return "Expires in " + dt + " days";
 }
 
-const ScannedItemRow = ({ name, image, expiryDate}) => {
-    return (
-        <View style={styles.container}>
-            <Image source={{ uri: image }} style={styles.photo} />
-            <View style={styles.container_text}>
-                <Text style={styles.title}>
-                    {name}
-                </Text>
-                <Text>
-                    {relativeDate(expiryDate)}
-                </Text>
-            </View>
+export default class ScannedItemRow extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isExtended: false,
+            name: props.name,
+            image: props.image,
+            expiryDate: props.expiryDate,
+        }
+    }
 
-        </View>
-    )
+    _expandScannedItemRow = () => {
+        this.setState({isExtended: true})
+    }    
+    
+    render() {
+        return(
+            <TouchableOpacity onPress={this._expandScannedItemRow}>
+                <View style={styles.container}>
+                    <Image source={{ uri: this.state.image }} style={styles.photo} />
+                    <View style={styles.container_text}>
+                        <Text style={styles.title}>
+                            {this.state.name}
+                        </Text>
+                        <Text>
+                            {relativeDate(this.state.expiryDate)}
+                        </Text>
+                    </View>
+                </View>
+            </TouchableOpacity>            
+        );
+    }
 };
-
-export default ScannedItemRow;
