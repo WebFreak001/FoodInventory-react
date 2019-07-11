@@ -50,6 +50,7 @@ export default class FridgeList extends Component {
 				items: items
 			});
 		}, err => {
+			console.error(err);
 			this.setState({
 				loading: false,
 				items: this.state.items
