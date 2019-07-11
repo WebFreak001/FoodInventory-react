@@ -5,13 +5,7 @@ import { TouchableNativeFeedback } from 'react-native-gesture-handler';
 
 const styles = StyleSheet.create({
     container: {
-        marginLeft:16,
-        marginRight:16,
-        marginTop: 8,
-        marginBottom: 8,
-        borderRadius: 5,
         backgroundColor: '#FFF',
-        elevation: 2,
     },
     inner: {
         flex: 1,
@@ -24,17 +18,30 @@ const styles = StyleSheet.create({
     container_text: {
         flex: 1,
         flexDirection: 'column',
-        marginLeft: 12,
+        paddingLeft:16,
+        paddingRight:16,
+        paddingTop: 8,
+        paddingBottom: 8,
         justifyContent: 'center',
+        borderBottomWidth: 1,
+        borderBottomColor: "rgba(0,0,0,0.13)",
     },
     description: {
         fontSize: 11,
         fontStyle: 'italic',
     },
     photo: {
+        width: 64,
+        minHeight: 10,
+        alignSelf: 'stretch',
+        backgroundColor: 'black',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column'
+    },
+    photo_image: {
         height: 64,
         width: 64,
-        borderRadius: 5,
     },
 });
 
@@ -83,7 +90,7 @@ export default class ScannedItemRow extends Component {
     _renderImage() {
         if (!this.props.image)
             return null;
-        return (<Image source={{ uri: this.props.image }} style={styles.photo} />);
+        return (<View style={styles.photo}><Image source={{ uri: this.props.image }} style={styles.photo_image} /></View>);
     }
 
     _renderExpiry() {
