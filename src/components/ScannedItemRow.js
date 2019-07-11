@@ -111,7 +111,7 @@ export default class ScannedItemRow extends Component {
     render() {
         return(
             <View style={styles.container}>
-                <TouchableNativeFeedback onPress={this._expandScannedItemRow} style={styles.inner}>
+                <TouchableNativeFeedback onPress={this._expandScannedItemRow.bind(this)} style={styles.inner}>
                     {this._renderImage()}
                     <View style={styles.container_text}>
                         <Text style={styles.title}>

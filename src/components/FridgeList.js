@@ -1,8 +1,8 @@
 let React = require('react');
 import { View, FlatList, StyleSheet, Text } from 'react-native';
-import ScannedItemRow from './ScannedItemRow';
 import { Component } from 'react';
 import Snackbar from 'react-native-snackbar';
+import FridgeItem from './FridgeItem';
 
 const styles = StyleSheet.create({
 	container: {
@@ -18,14 +18,14 @@ const styles = StyleSheet.create({
 });
 
 /**
- * @typedef {Object} ScannedItemListProperties
- * @property {() => Promise<import('./ScannedItemRow').ScannedItemRowProperties[]>} dataProvider
+ * @typedef {Object} FridgeListProperties
+ * @property {() => Promise<import('./FridgeItem').FridgeItemProperties[]>} dataProvider
  * @property {boolean} [reloadable]
  */
 
-export default class ScannedItemList extends Component {
+export default class FridgeList extends Component {
 	/**
-	 * @param {ScannedItemListProperties} props 
+	 * @param {FridgeListProperties} props 
 	 */
 	constructor(props) {
 		super(props);
@@ -55,7 +55,7 @@ export default class ScannedItemList extends Component {
 				items: this.state.items
 			});
 			Snackbar.show({
-				title: "Failed to load items",
+				title: "Failed to load fridges",
 				color: "white",
 				duration: Snackbar.LENGTH_LONG,
 				action: {
@@ -76,18 +76,14 @@ export default class ScannedItemList extends Component {
 						refreshing={this.state.loading}
 						onRefresh={this.props.reloadable !== false ? this.refreshItems.bind(this) : undefined}
 						keyExtractor={item => item.bsonID}
-						renderItem={({ item }) => <ScannedItemRow
-							name={item.name}
-							image={item.image}
-							expiryDate={item.expiryDate}
-						/>}
+						renderItem={({ item }) => <FridgeItem onItemPress={this.props.onItemPress} {...item}/>}
 					/>
 				</View>
 			);
 		} else {
 			return (
 				<View style={styles.container}>
-					<Text style={styles.missing}>No items scanned yet</Text>
+					<Text style={styles.missing}>No fridges created yet</Text>
 				</View>
 			);
 		}
