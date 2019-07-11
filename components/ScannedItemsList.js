@@ -2,6 +2,7 @@ let React = require('react');
 import { View, FlatList, StyleSheet, Text } from 'react-native';
 import ScannedItemRow from './ScannedItemRow';
 import { Component } from 'react';
+import Snackbar from 'react-native-snackbar';
 
 const styles = StyleSheet.create({
     container: {
@@ -41,6 +42,21 @@ export default class ScannedItemList extends Component {
             this.setState({
                 loading: false,
                 items: items
+            });
+        }, err => {
+            this.setState({
+                loading: false,
+                items: this.state.items
+            });
+            Snackbar.show({
+                title: "Failed to load items",
+                color: "white",
+                duration: Snackbar.LENGTH_LONG,
+                action: {
+                    title: "RETRY",
+                    color: 'yellow',
+                    onPress: this.refreshItems.bind(this),
+                },
             });
         });
     }

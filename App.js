@@ -7,6 +7,8 @@ import AddExistingScreen from './views/AddExistingScreen';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+// https://material.io/tools/color/#!/?view.left=1&amp;view.right=0&view.right=0&primary.color=651FFF
+
 const MainStack = createStackNavigator({
   Home: { screen: HomeView },
   Scanner: { screen: ScannerView }
@@ -30,11 +32,11 @@ const AddProductStack = createBottomTabNavigator({
       // }
 
       // You can return any component that you like here!
-      return (<Icon name="rocket" size={30} color={tintColor} />);
+      return (<Icon name="rocket" size={24} color={tintColor} />);
     },
   }),
   tabBarOptions: {
-    activeTintColor: 'tomato',
+    activeTintColor: '#651fff',
     inactiveTintColor: 'gray',
   },
 });

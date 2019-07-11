@@ -1,7 +1,29 @@
 let React = require('react');
 import { Component } from 'react';
-import { Button, View, ScrollView } from 'react-native';
+import { Button, View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import ScannedItemList from '../components/ScannedItemsList';
+
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+// https://material.io/tools/color/#!/?view.left=1&amp;view.right=0&view.right=0&primary.color=651FFF
+
+ const styles = StyleSheet.create({
+  fab: {
+    //Here is the trick
+    position: 'absolute',
+    width: 56,
+    height: 56,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    right: 16,
+    bottom: 16,
+    backgroundColor: '#651fff',
+    color: 'white',
+    borderRadius: 28,
+    elevation: 5
+ }
+});
 
 export default class HomeView extends Component {
   constructor(props) {
@@ -14,20 +36,22 @@ export default class HomeView extends Component {
         "items": [],
         "bsonID": "5d1d9c85af6f44db0ac6dac0"
       }
-    }
+    };
   }
 
   static navigationOptions = {
     title: 'Home',
   };
 
-  componentDidMount() {
-    this.loadAPI();
-  }
-
   async loadAPI() {
     var data = await fetch(this.state.fridgeServer + "/api/fridge/" + this.state.fridgeID);
-    return await data.json();
+    var ret = await data.json();
+    this.setState({
+      fridgeServer: "http://127.0.0.1:3000",
+      fridgeID: "5d1d9c85af6f44db0ac6dac0",
+      api: ret
+    });
+    return ret;
   }
 
   async fetchItems() {
@@ -39,10 +63,12 @@ export default class HomeView extends Component {
     const { navigate } = this.props.navigation;
     return (
       <View style={{flex: 1, flexDirection: 'column'}}>
-        <Button title="Scan Item" onPress={() => navigate('Scanner')} />
         <ScannedItemList
           dataProvider={this.fetchItems.bind(this)}
         />
+        <TouchableOpacity style={styles.fab} onPress={() => navigate('Scanner')}>
+          <Icon name="barcode" size={24} color={styles.fab.color} />
+        </TouchableOpacity>
       </View>
     );
   }
