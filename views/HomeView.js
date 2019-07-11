@@ -25,14 +25,14 @@ export default class HomeView extends Component {
     this.loadAPI();
   }
 
-  loadAPI() {
-    fetch(this.state.fridgeServer + "/api/fridge/" + this.state.fridgeID).then(res => {
-      console.log(res);
-      res.json().then(json => {
-        this.state.api = json;
-        this.setState(this.state);
-      });
-    });
+  async loadAPI() {
+    var data = await fetch(this.state.fridgeServer + "/api/fridge/" + this.state.fridgeID);
+    return await data.json();
+  }
+
+  async fetchItems() {
+    var data = await this.loadAPI();
+    return data.items;
   }
 
   render() {
@@ -40,11 +40,9 @@ export default class HomeView extends Component {
     return (
       <View style={{flex: 1, flexDirection: 'column'}}>
         <Button title="Scan Item" onPress={() => navigate('Scanner')} />
-        <ScrollView>
-          <ScannedItemList
-            itemList={this.state.api.items}
-          />
-        </ScrollView>
+        <ScannedItemList
+          dataProvider={this.fetchItems.bind(this)}
+        />
       </View>
     );
   }
