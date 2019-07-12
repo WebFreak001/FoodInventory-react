@@ -5,6 +5,8 @@ import ScannedItemList from '../components/ScannedItemsList';
 
 import IconCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import AsyncStorage from '@react-native-community/async-storage';
+import FridgeAPI from '../FridgeAPI';
 
 // @ts-ignore
 const config = require("../config.json");
@@ -42,23 +44,13 @@ export default class FridgeView extends Component {
 	};
 
 	async loadAPI() {
-		var data = await fetch(config.serverURL + "/api/fridge/" + this.state.fridgeID, {
-			method: "GET",
-			headers: {
-				"User-Agent": "FoodInventory-react v0.1.0"
-			}
-		});
-		if (!data.ok) {
-			if (data.status == 404) {
-				this.setupFridge();
-				return;
-			} else {
-				throw new Error("Got invalid status code " + data.status + " when fetching fridge: " + await data.text());
-			}
+		var fridgeID = this.props.navigation.getParam("fridge", "NO-ID");
+		var ret = FridgeAPI.getFridge(fridgeID);
+		if (ret === undefined) {
+			this._fridgeNotFound(fridgeID);
+			return;
 		}
-		var ret = await data.json();
 		this.setState({
-			fridgeID: "5d1d9c85af6f44db0ac6dac0",
 			api: ret
 		});
 		return ret;
@@ -71,24 +63,20 @@ export default class FridgeView extends Component {
 		return data.items;
 	}
 
-	setupFridge() {
+	_fridgeNotFound(id) {
 		const { navigate } = this.props.navigation;
-	}
-
-	componentDidMount() {
-		this.setState({
-			fridgeID: this.props.navigation.getParam("fridge", "NO-ID")
-		});
+		navigate("Home", { msg: "fridge404", src: id });
 	}
 
 	render() {
 		const { navigate } = this.props.navigation;
+		var fridgeID = this.props.navigation.getParam("fridge", "NO-ID");
 		return (
 			<View style={{ flex: 1, flexDirection: 'column' }}>
 				<ScannedItemList
 					dataProvider={this.fetchItems.bind(this)}
 				/>
-				<TouchableOpacity style={styles.fab} onPress={() => navigate('Scanner')}>
+				<TouchableOpacity style={styles.fab} onPress={() => navigate('Scanner', { fridge: fridgeID })}>
 					<IconCommunity name="barcode-scan" size={24} color={styles.fab.color} accessibilityLabel="Scan product" />
 				</TouchableOpacity>
 			</View>

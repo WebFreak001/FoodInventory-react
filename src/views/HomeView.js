@@ -58,7 +58,25 @@ export default class HomeView extends Component {
 
 	openFridge(item) {
 		const { navigate } = this.props.navigation;
+		var focusSubscription = this.props.navigation.addListener('didFocus', () => {
+			focusSubscription.remove();
+			return this._leftFridge();
+		});
 		navigate("Fridge", { fridge: item.props.bsonID });
+	}
+
+	async _leftFridge() {
+		var msg = this.props.navigation.getParam("msg", "");
+		var src = this.props.navigation.getParam("src", "");
+		this.props.navigation.setParams({ msg: "", src: "" });
+		if (msg == "fridge404") {
+			Snackbar.show({
+				title: "This fridge doesn't exist anymore",
+				color: "white",
+				duration: Snackbar.LENGTH_LONG,
+			});
+			await this.removeFridge(src);
+		}
 	}
 
 	setupFridge() {
@@ -127,6 +145,20 @@ export default class HomeView extends Component {
 				duration: Snackbar.LENGTH_LONG,
 			});
 		}
+	}
+
+	async removeFridge(id) {
+		var items = await this.fetchItems();
+		var index = items.findIndex((e) => e.bsonID == id);
+		if (index == -1)
+			return false;
+
+		items.splice(index, 1);
+		await AsyncStorage.setItem("fridges", JSON.stringify(items));
+
+		this.fridgeList.refreshItems();
+
+		return true;
 	}
 
 	render() {

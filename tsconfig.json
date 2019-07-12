@@ -2,6 +2,7 @@
 	"compilerOptions": {
 		"allowJs": true,
 		"jsx": "react-native",
-		"checkJs": true
+		"checkJs": true,
+		"lib": ["es7"]
 	}
 }

@@ -1,5 +1,5 @@
 {
-	"serverURL": "http://192.168.178.80:3000",
+	"serverURL": "http://127.0.0.1:3000",
 	"colors": {
 		"primary": "#651fff",
 		"text": "#ffffff",

@@ -4,10 +4,11 @@ import { createStackNavigator, createAppContainer, createBottomTabNavigator } fr
 import HomeView from './views/HomeView';
 import FridgeView from './views/FridgeView';
 import ScannerView from './views/ScannerView';
-import AddExistingScreen from './views/AddExistingScreen';
+import CreateProductScreen from './views/CreateProductScreen';
 
 import IconCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import AddExistingScreen from './views/AddExistingScreen';
 
 // @ts-ignore
 const config = require("./config.json");
@@ -18,13 +19,15 @@ const MainStack = createStackNavigator({
   Home: { screen: HomeView },
   Fridge: {
     screen: FridgeView,
-    path: 'fridge/:fridge'
+    path: 'Fridge/:fridge'
   },
   Scanner: { screen: ScannerView }
 });
 
-const AddProductStack = createBottomTabNavigator({
-  AddExisting: { screen: AddExistingScreen }
+
+
+const CreateProductStack = createBottomTabNavigator({
+  NameProduct: { screen: CreateProductScreen }
 }, {
     defaultNavigationOptions: ({ navigation }) => ({
       tabBarIcon: ({ focused, horizontal, tintColor }) => {
@@ -52,7 +55,9 @@ const AddProductStack = createBottomTabNavigator({
 
 const RootStack = createStackNavigator({
   Main: { screen: MainStack },
-  AddProduct: { screen: AddProductStack },
+  AddExisting: { screen: AddExistingScreen },
+  // StoreProduct: { screen: StoreProductScreen },
+  CreateProduct: { screen: CreateProductStack },
 }, {
     mode: "modal",
     headerMode: "none"

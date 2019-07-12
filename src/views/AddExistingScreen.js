@@ -1,13 +1,20 @@
 let React = require('react');
 import { Component } from 'react';
-import { Button, View, Text, FlatList, StyleSheet } from 'react-native';
-import ScannedItemRow from '../components/ScannedItemRow';
+import { View, Text, FlatList, StyleSheet } from 'react-native';
+import { Button } from 'react-native-paper';
 import ScannedItemList from '../components/ScannedItemsList';
+import FridgeAPI from '../FridgeAPI';
 
 const styles = StyleSheet.create({
   page1: {
-      flex: 1,
-      flexDirection: 'column'
+    flex: 1,
+    flexDirection: 'column'
+  },
+  button: {
+    flex: 1
+  },
+  list: {
+    flex: 1
   },
 });
 
@@ -20,13 +27,39 @@ export default class AddExistingScreen extends Component {
     title: 'Add Product',
   };
 
+  _storeAnother() {
+
+  }
+
+  async fetchConflicts() {
+    var fridgeID = this.props.navigation.getParam("fridge", "NO-ID");
+    var { code } = this.props.navigation.state.params;
+
+    var fridge = await FridgeAPI.getFridge(fridgeID);
+    if (fridge === undefined) {
+      this._storeAnother();
+      return;
+    }
+
+    var conflicts = fridge.items.filter(item => item.code == code);
+    if (conflicts.length == 0) {
+      this._storeAnother();
+      return;
+    } else {
+      return conflicts;
+    }
+  }
+
   render() {
     const { navigate } = this.props.navigation;
     var { code } = this.props.navigation.state.params;
     return (
       <View style={styles.page1}>
+        <Button style={styles.button} onPress={this._storeAnother.bind(this)}>Store Another</Button>
+        <Text>- or -</Text>
         <ScannedItemList
-          dataProvider={() => Promise.resolve([{bsonID: "local1", name: "Product " + code}])}
+          style={styles.list}
+          dataProvider={this.fetchConflicts.bind(this)}
         />
       </View>
     );

@@ -69,25 +69,18 @@ export default class FridgeList extends Component {
 	}
 
 	render() {
-		if (Array.isArray(this.state.items) && this.state.items.length > 0) {
-			return (
-				<View style={styles.container}>
-					<FlatList
-						data={this.state.items}
-						refreshing={this.state.loading}
-						onRefresh={this.props.reloadable !== false ? this.refreshItems.bind(this) : undefined}
-						keyExtractor={item => item.bsonID}
-						renderItem={({ item }) => <FridgeItem onItemPress={this.props.onItemPress} {...item}/>}
-					/>
-				</View>
-			);
-		} else {
-			return (
-				<View style={styles.container}>
-					<Text style={styles.missing}>No fridges created yet</Text>
-				</View>
-			);
-		}
+		return (
+			<View style={styles.container}>
+				<FlatList
+					data={this.state.items}
+					refreshing={this.state.loading}
+					onRefresh={this.props.reloadable !== false ? this.refreshItems.bind(this) : undefined}
+					keyExtractor={item => item.bsonID}
+					renderItem={({ item }) => <FridgeItem onItemPress={this.props.onItemPress} {...item}/>}
+					ListEmptyComponent={<Text style={styles.missing}>No fridges created yet</Text>}
+				/>
+			</View>
+		);
 	};
 
 }

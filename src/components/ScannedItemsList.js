@@ -39,17 +39,21 @@ export default class ScannedItemList extends Component {
 		this.refreshItems();
 	}
 
-	refreshItems() {
+	async refreshItems() {
 		this.setState({
 			loading: true,
 			items: this.state.items
 		});
-		this.props.dataProvider().then(items => {
+		try {
+			var items = await this.props.dataProvider();
+			if (items instanceof Error)
+				throw items;
 			this.setState({
 				loading: false,
 				items: items
 			});
-		}, err => {
+		}
+		catch (err) {
 			console.error(err);
 			this.setState({
 				loading: false,
@@ -65,33 +69,26 @@ export default class ScannedItemList extends Component {
 					onPress: this.refreshItems.bind(this),
 				},
 			});
-		});
+		}
 	}
 
 	render() {
-		if (Array.isArray(this.state.items) && this.state.items.length > 0) {
-			return (
-				<View style={styles.container}>
-					<FlatList
-						data={this.state.items}
-						refreshing={this.state.loading}
-						onRefresh={this.props.reloadable !== false ? this.refreshItems.bind(this) : undefined}
-						keyExtractor={item => item.bsonID}
-						renderItem={({ item }) => <ScannedItemRow
-							name={item.name}
-							image={item.image}
-							expiryDate={item.expiryDate}
-						/>}
-					/>
-				</View>
-			);
-		} else {
-			return (
-				<View style={styles.container}>
-					<Text style={styles.missing}>No items scanned yet</Text>
-				</View>
-			);
-		}
+		return (
+			<View style={styles.container}>
+				<FlatList
+					data={this.state.items}
+					refreshing={this.state.loading}
+					onRefresh={this.props.reloadable !== false ? this.refreshItems.bind(this) : undefined}
+					keyExtractor={item => item.bsonID}
+					renderItem={({ item }) => <ScannedItemRow
+						name={item.name}
+						image={item.image}
+						expiryDate={item.expiryDate}
+					/>}
+					ListEmptyComponent={<Text style={styles.missing}>No items scanned yet</Text>}
+				/>
+			</View>
+		);
 	};
 
 }
