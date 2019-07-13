@@ -11,10 +11,17 @@ const styles = StyleSheet.create({
     flexDirection: 'column'
   },
   button: {
-    flex: 1
+    flex: 0.3,
+    alignItems: 'stretch',
+    justifyContent: 'center'
+  },
+  separator: {
+    flexShrink: 0,
+    textAlign: 'center',
+    padding: 8
   },
   list: {
-    flex: 1
+    flex: 3
   },
 });
 
@@ -56,7 +63,7 @@ export default class AddExistingScreen extends Component {
     return (
       <View style={styles.page1}>
         <Button style={styles.button} onPress={this._storeAnother.bind(this)}>Store Another</Button>
-        <Text>- or -</Text>
+        <Text style={styles.separator}>- or use existing -</Text>
         <ScannedItemList
           style={styles.list}
           dataProvider={this.fetchConflicts.bind(this)}

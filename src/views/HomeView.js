@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Portal, Provider, Modal, TextInput, Button, Dialog } from 'react-native-paper';
 import Snackbar from 'react-native-snackbar';
+import FridgeAPI from '../FridgeAPI';
 
 // @ts-ignore
 const config = require("../config.json");
@@ -46,12 +47,48 @@ export default class HomeView extends Component {
 	};
 
 	async fetchItems() {
+		/**
+		 * @type {(import('../FridgeAPI').Fridge)[]}
+		 */
 		var fridges = [];
 		try {
 			var ret = await AsyncStorage.getItem("fridges");
 			if (ret[0] == "[")
 				fridges = JSON.parse(ret);
 		} catch (e) {
+		}
+
+		var available = [];
+		try {
+			var changed = false;
+			console.log(fridges);
+			var extra = await FridgeAPI.getFridges(fridges.map(i => i.bsonID));
+			console.log("extra: ", extra);
+			extra.forEach(fridge => {
+				for (let j = 0; j < fridges.length; j++) {
+					const other = fridges[j];
+					if (fridge.bsonID == other.bsonID) {
+						available.push(other);
+						if (fridge.label != other.label || fridge.lastUse != other.lastUse) {
+							other.label = fridge.label;
+							other.lastUse = fridge.lastUse;
+							changed = true;
+						}
+						break;
+					}
+				}
+			});
+			if (changed) {
+				AsyncStorage.setItem("fridges", JSON.stringify(fridges));
+			}
+		} catch (e) {
+		}
+		for (let i = 0; i < fridges.length; i++) {
+			const fridge = fridges[i];
+			if (available.indexOf(fridge) === -1) {
+				// @ts-ignore
+				fridge.unavailable = true;
+			}
 		}
 		return fridges;
 	}
@@ -125,7 +162,8 @@ export default class HomeView extends Component {
 			var json = await data.json();
 			var fridge = {
 				bsonID: json.bsonID,
-				label: json.label
+				label: json.label,
+				lastUse: json.lastUse
 			};
 			if (!fridge.bsonID || !fridge.label)
 				throw new Error("Unexpected API response");

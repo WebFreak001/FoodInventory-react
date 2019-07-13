@@ -2,6 +2,7 @@ let React = require('react');
 import { View, Text, StyleSheet, Image, TouchableOpacity, Alert, StyleProp, TextStyle } from 'react-native';
 import { Component } from 'react';
 import { TouchableNativeFeedback } from 'react-native-gesture-handler';
+import { dateDiff, relativeDate } from '../utils';
 
 const styles = StyleSheet.create({
     container: {
@@ -45,24 +46,6 @@ const styles = StyleSheet.create({
     },
 });
 
-function dateDiff(a, b) {
-    return Math.round((a.getTime() - b.getTime()) / 1000 / 60 / 60 / 24);
-  }
-
-function relativeDate(d) {
-    var dt = dateDiff(new Date(d), new Date());
-    if (dt < -1)
-      return "Expired " + (-dt) + " days ago";
-    else if (dt == -1)
-      return "Expires yesterday";
-    else if (dt == 0)
-      return "Expires today";
-    else if (dt == 1)
-      return "Expires tomorrow";
-    if (dt > 1)
-      return "Expires in " + dt + " days";
-}
-
 /**
  * @typedef {Object} ScannedItemRowProperties
  * @property {string} bsonID
@@ -104,7 +87,7 @@ export default class ScannedItemRow extends Component {
         if (d <= 1)
             style.fontWeight = "bold";
         return (<Text style={style}>
-            {relativeDate(this.props.expiryDate)}
+            {relativeDate(this.props.expiryDate, "Expired", "Expires")}
         </Text>);
     }
     

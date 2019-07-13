@@ -34,7 +34,8 @@ const config = require("./config.json");
  * @typedef {Object} Fridge
  * @property {string} bsonID
  * @property {string} label
- * @property {FridgeItem[]} items
+ * @property {string} lastUse
+ * @property {FridgeItem[]} [items]
  */
 
 export default class FridgeAPI {
@@ -47,6 +48,15 @@ export default class FridgeAPI {
 			"/api/fridge/" + encodeURIComponent(id),
 			"fetching fridge " + id);
 	}
+	/**
+	 * @param {string[]} ids
+	 * @returns {Promise<Fridge[] | undefined>}
+	 */
+	static async getFridges(ids) {
+		return await this._get(
+			"/api/fridges?ids=" + encodeURIComponent(ids.join(",")),
+			"fetching all fridges");
+	}
 
 	/**
 	 * @param {string} code
@@ -57,6 +67,10 @@ export default class FridgeAPI {
 		return await this._get(
 			"/api/scan?code=" + encodeURIComponent(code) + (force ? "&force=true" : ""),
 			"scanning code " + code);
+	}
+
+	static async _post(endpoint, body, msg) {
+		return await this._http("POST", endpoint, body, msg);
 	}
 
 	static async _get(endpoint, msg) {
